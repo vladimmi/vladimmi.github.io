@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RMT filter test</title>
+    <style type="text/css">
+        #textInput.error {
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <textarea cols="50" rows="5" id="textInput" class=""></textarea>
+    <br/>
+    <button id="testButton">Test</button>
+
+    <script type="application/javascript">
+        var forbiddenUrls = ['aoaue.com', 'egpal.com'];
+        var characterMap = {
+            'a': ['a', 'à', 'á', 'â', 'ã', 'ä', 'å', 'а'],
+            'b': ['b'],
+            'c': ['c', '¢', '©', 'с'],
+            'd': ['d'],
+            'e': ['e', 'è', 'é', 'ê', 'ë', 'е', 'ё'],
+            'f': ['f'],
+            'g': ['g'],
+            'h': ['h'],
+            'i': ['i'],
+            'j': ['j'],
+            'k': ['k'],
+            'l': ['l'],
+            'm': ['m', 'м'],
+            'n': ['n'],
+            'o': ['o', '0', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ð', 'о'],
+            'p': ['p'],
+            'q': ['q'],
+            'r': ['r'],
+            's': ['s'],
+            't': ['t'],
+            'u': ['u', 'ù', 'ú', 'û', 'ü'],
+            'v': ['v'],
+            'w': ['w'],
+            'x': ['x'],
+            'y': ['y'],
+            'z': ['z'],
+            '.': ["\\W", 'dot']
+        };
+        var regexUrls = [];
+        for (var u = 0; u < forbiddenUrls.length; u++) {
+            var url = forbiddenUrls[u];
+            var letterGroups = [];
+            for (var l = 0; l < url.length; l++) {
+                letterGroups.push('(?:' + characterMap[url.charAt(l)].join('|') + ')');
+            }
+            regexUrls.push('(?:' + letterGroups.join("\\W*") + ')');
+        }
+        var regex = new RegExp(regexUrls.join('|'), 'giu');
+
+        var $input = document.getElementById('textInput');
+        document.getElementById('testButton').onclick = function() {
+            $input.className = '';
+            if ($input.value.search(regex) !== -1) {
+                $input.className = 'error';
+            }
+        };
+    </script>
+</body>
+</html>
